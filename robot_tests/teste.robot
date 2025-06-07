@@ -58,20 +58,20 @@ Cenário 1: Acessando o site do Robot
     Clicar no botão login
     Verificar se o usuário está logado
 
-Cenário 2: Testando Robot
-    [Tags]  Cenario2
-    Abrir Site google
-    Clicar sobre o botão Login
-    Digitar email
-    Digitar senha
-    Clicar no botão login
-    Verificar se o usuário está logado
+# Cenário 2: Testando Robot
+#     [Tags]  Cenario2
+#     Abrir Site google
+#     Clicar sobre o botão Login
+#     Digitar email
+#     Digitar senha
+#     Clicar no botão login
+#     Verificar se o usuário está logado
 
-Cenário 3: Testando valor no teste
-    [Tags]  Cenario3
-    Abrir esse site  https://automationpratice.com.br/
-    Clicar sobre o botão Login
-    Digitar email
-    Digitar senha
-    Clicar no botão login
-    Verificar se o usuário está logado
+# Cenário 3: Testando valor no teste
+#     [Tags]  Cenario3
+#     Abrir esse site  https://automationpratice.com.br/
+#     Clicar sobre o botão Login
+#     Digitar email
+#     Digitar senha
+#     Clicar no botão login
+#     Verificar se o usuário está logado
