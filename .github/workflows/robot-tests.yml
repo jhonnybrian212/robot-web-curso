@@ -19,14 +19,14 @@ jobs:
 
       - name: Executar testes com Robot Framework
         run: |
-          TIMESTAMP=$(date +%s)
           docker run --rm \
             -v ${{ github.workspace }}:/opt/robotframework/tests \
             -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
-            -e ROBOT_OPTIONS="--variable BROWSER:chrome \
-                              --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-profile-$TIMESTAMP" \
             ppodgorsek/robot-framework \
-            robot /opt/robotframework/tests/robot_tests
+            bash -c "mkdir -p /tmp/chrome-user-data && \
+                     robot --variable BROWSER:chrome \
+                           --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-user-data \
+                           /opt/robotframework/tests/robot_tests"
 
       - name: Upload dos relatórios de teste
         if: always()
