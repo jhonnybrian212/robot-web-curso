@@ -10,11 +10,12 @@ jobs:
     - name: Checkout do código
       uses: actions/checkout@v2
 
-    - name: Executar testes com Robot Framework e imagem estável
+    - name: Executar testes com Robot Framework e imagem funcional
       run: |
-        docker run --rm -v ${{ github.workspace }}:/opt/robotframework/tests \
+        docker run --rm \
+          -v ${{ github.workspace }}:/opt/robotframework/tests \
           -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
-          ppodgorsek/robot-framework:2022.02.1
+          ppodgorsek/robot-framework:latest-chromium
 
     - name: Upload dos relatórios
       uses: actions/upload-artifact@v4
