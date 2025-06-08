@@ -21,7 +21,7 @@ jobs:
             ppodgorsek/robot-framework \
             robot --variable BROWSER:chrome \
                   --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu \
-                  tests/robot_tests
+                  /opt/robotframework/tests/robot_tests
 
       - name: Upload dos relatórios
         uses: actions/upload-artifact@v4
