@@ -15,10 +15,9 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/opt/robotframework/tests \
             -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
-            -v /tmp/chrome-data:/tmp/chrome-data \
             ppodgorsek/robot-framework \
             robot --variable BROWSER:chrome \
-                  --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-data \
+                  --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu \
                   /opt/robotframework/tests/robot_tests
 
       - name: Upload dos relatórios de teste
