@@ -15,14 +15,14 @@ jobs:
         mkdir -p reports
         sudo chmod -R 777 reports
 
-    - name: Executar testes com Robot Framework
+    - name: Executar testes com Robot Framework (imagem estável via GHCR)
       env:
         ROBOT_OPTIONS: --variable BROWSER:chrome --variable BROWSER_OPTIONS:--no-sandbox\ --disable-dev-shm-usage\ --headless\ --disable-gpu
       run: |
         docker run --rm \
           -v ${{ github.workspace }}:/opt/robotframework/tests \
           -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
-          ppodgorsek/robot-framework
+          ghcr.io/ppodgorsek/robot-framework:latest
 
     - name: Upload dos relatórios
       uses: actions/upload-artifact@v4
