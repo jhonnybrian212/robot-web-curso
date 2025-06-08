@@ -10,10 +10,16 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    # - name: Robot Framework
+    #   uses: joonvena/robotframework-docker-action@v1.0
+    #   with:
+    #     robot_reports_dir: 'reports'
+
     - name: Robot Framework
       uses: joonvena/robotframework-docker-action@v1.0
       with:
-        robot_reports_dir: 'reports'
+        robot_image: "ppodgorsek/robot-framework:2022.02.1"
+        robot_reports_dir: "reports"
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
