@@ -15,20 +15,16 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Criar diretórios necessários
-        run: |
-          mkdir -p reports
-          echo "CHROME_TMP_DIR=$(mktemp -d)" >> $GITHUB_ENV
+        run: mkdir -p reports
 
       - name: Executar testes com Robot Framework
-        env:
-          CHROME_TMP_DIR: ${{ env.CHROME_TMP_DIR }}
         run: |
+          TIMESTAMP=$(date +%s)
           docker run --rm \
             -v ${{ github.workspace }}:/opt/robotframework/tests \
             -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
-            -v ${{ env.CHROME_TMP_DIR }}:/tmp/chrome-profile \
-            -e ROBOT_OPTIONS="--variable BROWSER:chrome --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-profile" \
-            -e XDG_CACHE_HOME=/tmp \
+            -e ROBOT_OPTIONS="--variable BROWSER:chrome \
+                              --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-profile-$TIMESTAMP" \
             ppodgorsek/robot-framework \
             robot /opt/robotframework/tests/robot_tests
 
