@@ -7,25 +7,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código
+      - name: Checkout do repositório
         uses: actions/checkout@v2
-
-      - name: Criar diretório de relatórios
-        run: mkdir -p reports
 
       - name: Executar testes com Robot Framework
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/opt/robotframework/tests \
             -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
+            -v /tmp/chrome-data:/tmp/chrome-data \
             ppodgorsek/robot-framework \
             robot --variable BROWSER:chrome \
                   --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-data \
                   /opt/robotframework/tests/robot_tests
 
-      - name: Upload dos relatórios
-        uses: actions/upload-artifact@v4
+      - name: Upload dos relatórios de teste
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: robot-reports
           path: reports
