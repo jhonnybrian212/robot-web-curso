@@ -2,9 +2,9 @@ name: Robot Framework Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   robot-tests:
@@ -14,13 +14,14 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v3
 
-      - name: Criar pastas de relatórios e diretório temporário único
+      - name: Criar diretórios necessários
         run: |
           mkdir -p reports
-          export CHROME_TMP_DIR=$(mktemp -d)
-          echo "CHROME_TMP_DIR=$CHROME_TMP_DIR" >> $GITHUB_ENV
+          echo "CHROME_TMP_DIR=$(mktemp -d)" >> $GITHUB_ENV
 
       - name: Executar testes com Robot Framework
+        env:
+          CHROME_TMP_DIR: ${{ env.CHROME_TMP_DIR }}
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/opt/robotframework/tests \
