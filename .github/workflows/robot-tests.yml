@@ -1,28 +1,35 @@
-name: Run Robot Framework Tests
+name: Robot Tests
 
 on:
   push:
     branches:
       - main
   pull_request:
-    branches:
-      - main
 
 jobs:
-  robot-tests:
+  robot_tests:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Run Robot Tests with Docker (Chrome Headless)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
         run: |
-          docker run --rm \
-            -v ${{ github.workspace }}/robot_tests:/opt/robotframework/tests:ro \
-            -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
-            marketion/robot:latest \
-            robot --variable BROWSER:chrome \
-                  --variable BROWSER_OPTIONS:--headless,--disable-gpu,--no-sandbox,--disable-dev-shm-usage \
-                  --outputdir /opt/robotframework/reports \
-                  /opt/robotframework/tests
+          pip install robotframework selenium webdriver-manager robotframework-seleniumlibrary
+
+      - name: Run Robot Framework tests
+        run: |
+          robot --outputdir reports robot_tests
+
+      - name: Upload Robot test report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: robot-reports
+          path: reports
