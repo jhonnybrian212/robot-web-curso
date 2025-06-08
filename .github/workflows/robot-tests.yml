@@ -25,7 +25,11 @@ jobs:
 
       - name: Run Robot Framework tests
         run: |
-          robot --outputdir reports robot_tests
+          robot \
+            --variable BROWSER:chrome \
+            --variable BROWSER_OPTIONS:--headless,--disable-gpu,--no-sandbox,--disable-dev-shm-usage,--user-data-dir=/tmp/chrome-profile \
+            --outputdir reports \
+            robot_tests
 
       - name: Upload test reports
         if: always()
