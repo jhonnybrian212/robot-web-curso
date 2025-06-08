@@ -1,10 +1,10 @@
-name: Robot Tests
+name: Robot Framework Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
+    branches: [main]
 
 jobs:
   robot_tests:
@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -27,9 +27,9 @@ jobs:
         run: |
           robot --outputdir reports robot_tests
 
-      - name: Upload Robot test report
+      - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: robot-reports
           path: reports
