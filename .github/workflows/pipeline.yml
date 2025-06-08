@@ -7,27 +7,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout do código
-      uses: actions/checkout@v2
+      - name: Checkout do código
+        uses: actions/checkout@v2
 
-    - name: Criar pasta de relatórios com permissões certas
-      run: |
-        mkdir -p reports
-        sudo chmod -R 777 reports
+      - name: Criar diretório de relatórios
+        run: mkdir -p reports
 
-    - name: Executar testes com Robot Framework
-      run: |
-        docker run --rm \
-          -v ${{ github.workspace }}:/opt/robotframework/tests \
-          -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
-          ppodgorsek/robot-framework \
-          robot --variable BROWSER:chrome \
-                --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu \
-                robot_tests
+      - name: Executar testes com Robot Framework
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/opt/robotframework/tests \
+            -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
+            ppodgorsek/robot-framework \
+            robot --variable BROWSER:chrome \
+                  --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu \
+                  tests/robot_tests
 
-    - name: Upload dos relatórios
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: robot-reports
-        path: reports
+      - name: Upload dos relatórios
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: robot-reports
+          path: reports
