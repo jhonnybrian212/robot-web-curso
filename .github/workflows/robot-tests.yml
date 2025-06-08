@@ -11,18 +11,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout do código
-      uses: actions/checkout@v3
+      - name: Checkout do repositório
+        uses: actions/checkout@v3
 
-    - name: Criar pasta de relatórios
-      run: mkdir -p reports
+      - name: Criar pasta de relatórios
+        run: mkdir -p reports
 
-    - name: Executar testes com Robot Framework
-      run: |
-        docker run --rm \
-          -v ${{ github.workspace }}:/opt/robotframework/tests \
-          -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
-          ppodgorsek/robot-framework \
-          robot --variable BROWSER:chrome \
-                --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu \
-                /opt/robotframework/tests/robot_tests
+      - name: Executar testes com Robot Framework
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/opt/robotframework/tests \
+            -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
+            -e ROBOT_OPTIONS="--variable BROWSER:chrome --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-data" \
+            -e XDG_CACHE_HOME=/tmp \
+            ppodgorsek/robot-framework \
+            robot /opt/robotframework/tests/robot_tests
+
+      - name: Upload dos relatórios de teste
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-reports
+          path: reports
