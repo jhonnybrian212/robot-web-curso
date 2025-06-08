@@ -20,7 +20,7 @@ jobs:
             -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
             ppodgorsek/robot-framework \
             robot --variable BROWSER:chrome \
-                  --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu \
+                  --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-data \
                   /opt/robotframework/tests/robot_tests
 
       - name: Upload dos relatórios
