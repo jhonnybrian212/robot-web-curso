@@ -1,36 +1,28 @@
-name: Robot Framework Tests
+name: Run Robot Framework Tests
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   pull_request:
-    branches: ["main"]
+    branches:
+      - main
 
 jobs:
   robot-tests:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do repositório
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Criar diretórios necessários
-        run: mkdir -p reports
-
-      - name: Executar testes com Robot Framework
+      - name: Run Robot Tests with Docker (Chrome Headless)
         run: |
           docker run --rm \
-            -v ${{ github.workspace }}:/opt/robotframework/tests \
+            -v ${{ github.workspace }}/robot_tests:/opt/robotframework/tests:ro \
             -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
-            ppodgorsek/robot-framework \
-            bash -c "mkdir -p /tmp/chrome-user-data && \
-                     robot --variable BROWSER:chrome \
-                           --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-user-data \
-                           /opt/robotframework/tests/robot_tests"
-
-      - name: Upload dos relatórios de teste
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: robot-reports
-          path: reports
+            marketion/robot:latest \
+            robot --variable BROWSER:chrome \
+                  --variable BROWSER_OPTIONS:--headless,--disable-gpu,--no-sandbox,--disable-dev-shm-usage \
+                  --outputdir /opt/robotframework/reports \
+                  /opt/robotframework/tests
