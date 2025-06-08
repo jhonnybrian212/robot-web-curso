@@ -14,15 +14,19 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v3
 
-      - name: Criar pasta de relatórios
-        run: mkdir -p reports
+      - name: Criar pastas de relatórios e diretório temporário único
+        run: |
+          mkdir -p reports
+          export CHROME_TMP_DIR=$(mktemp -d)
+          echo "CHROME_TMP_DIR=$CHROME_TMP_DIR" >> $GITHUB_ENV
 
       - name: Executar testes com Robot Framework
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/opt/robotframework/tests \
             -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
-            -e ROBOT_OPTIONS="--variable BROWSER:chrome --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-data" \
+            -v ${{ env.CHROME_TMP_DIR }}:/tmp/chrome-profile \
+            -e ROBOT_OPTIONS="--variable BROWSER:chrome --variable BROWSER_OPTIONS:--no-sandbox,--disable-dev-shm-usage,--headless,--disable-gpu,--user-data-dir=/tmp/chrome-profile" \
             -e XDG_CACHE_HOME=/tmp \
             ppodgorsek/robot-framework \
             robot /opt/robotframework/tests/robot_tests
