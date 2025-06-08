@@ -7,21 +7,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout do código
       uses: actions/checkout@v2
 
-    # - name: Robot Framework
-    #   uses: joonvena/robotframework-docker-action@v1.0
-    #   with:
-    #     robot_reports_dir: 'reports'
+    - name: Executar testes com Robot Framework e imagem estável
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/opt/robotframework/tests \
+          -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
+          ppodgorsek/robot-framework:2022.02.1
 
-    - name: Robot Framework
-      uses: joonvena/robotframework-docker-action@v1.0
-      with:
-        robot_image: "ppodgorsek/robot-framework:2022.02.1"
-        robot_reports_dir: "reports"
-
-    - name: Upload test results
+    - name: Upload dos relatórios
       uses: actions/upload-artifact@v4
       if: always()
       with:
