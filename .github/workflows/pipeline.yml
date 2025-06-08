@@ -10,9 +10,10 @@ jobs:
     - name: Checkout do código
       uses: actions/checkout@v2
 
-    - name: Executar testes com Robot Framework (imagem oficial)
+    - name: Executar testes com Robot Framework
       run: |
         docker run --rm \
+          --user $(id -u):$(id -g) \
           -v ${{ github.workspace }}:/opt/robotframework/tests \
           -v ${{ github.workspace }}/reports:/opt/robotframework/reports \
           ppodgorsek/robot-framework
